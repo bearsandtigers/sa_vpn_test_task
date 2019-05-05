@@ -1,0 +1,19 @@
+# create the top screen
+screen -t "VPN" docker-compose exec vpnserver /bin/sh
+# split the screen and focus onto the new created space
+split
+focus
+screen -t "Host 1" docker-compose exec host1 /bin/sh
+# split vertically and focus onto the new area
+split -v
+focus
+# create the htop screen
+screen -t "Host 2" docker-compose exec host2 /bin/sh
+# focus twice to end up with the bash area active
+
+bind ',' prev                                                                                      
+bind '.' next
+altscreen on                                                                                       
+term screen-256color
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'

@@ -1,0 +1,49 @@
+---
+version: '2'
+services:
+  host1:
+    build:
+      context: host1
+    container_name: host1
+    command: tail -f /dev/null
+    privileged: true
+    networks:
+      net_C_public:
+      net_A:
+        ipv4_address: 172.16.4.10
+        aliases:
+          - host1-lan
+
+  vpnserver:
+    build:
+      context: vpnserver
+    container_name: vpnserver
+    privileged: true
+    networks:
+      net_C_public:
+        ipv4_address: 10.1.1.10
+        aliases:
+          - vpnserver-ext
+      net_B:
+        ipv4_address: 172.16.8.3
+
+  host2:
+    build:
+      context: host2
+    container_name: host2
+    privileged: true
+    command: tail -f /dev/null
+    networks:
+      - net_B
+    
+networks:
+  net_A:
+    ipam:
+      config: [ subnet: "172.16.4.0/24"]
+  net_B:
+    ipam:
+      config: [ subnet: "172.16.8.0/24"]
+  net_C_public:
+    ipam:
+      config: [ subnet: "10.1.1.0/24"]
+  
